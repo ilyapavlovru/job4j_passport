@@ -1,5 +1,7 @@
 package ru.job4j.passport.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
@@ -18,7 +20,11 @@ public class Passport {
     private String serialNumber;
 
     @Column(name = "expiration")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date expirationDate;
+
+    public Passport() {
+    }
 
     public Passport(int id, String fio, String serialNumber, Date expirationDate) {
         this.id = id;

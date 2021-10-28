@@ -19,14 +19,14 @@ public class PassportController {
         this.passportService = passportService;
     }
 
-    @RequestMapping(method= RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Passport>> find() {
         return new ResponseEntity<>(
                 passportService.findAllPassports(),
                 HttpStatus.OK);
     }
 
-    @RequestMapping(method= RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Passport> save(@RequestBody Passport passport) {
         return new ResponseEntity<>(
                 passportService.savePassport(passport),
@@ -34,4 +34,16 @@ public class PassportController {
         );
     }
 
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<Passport> update(@RequestParam int id, @RequestBody Passport passport) {
+
+        Passport foundPassport = passportService.findPassportById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Passport is not found. Please, check passportId"));
+
+        foundPassport.setFio(passport.getFio());
+        foundPassport.setSerialNumber(passport.getSerialNumber());
+        foundPassport.setExpirationDate(passport.getExpirationDate());
+
+        return new ResponseEntity<>(passportService.savePassport(foundPassport), HttpStatus.OK);
+    }
 }

@@ -6,6 +6,7 @@ import ru.job4j.passport.repository.PassportRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PassportService {
@@ -24,5 +25,9 @@ public class PassportService {
 
     public Passport savePassport(Passport passport) {
         return passportRepository.save(passport);
+    }
+
+    public Optional<Passport> findPassportById(int id) {
+        return passportRepository.findById(id);
     }
 }
