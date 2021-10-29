@@ -19,7 +19,7 @@ public class PassportController {
         this.passportService = passportService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping("/findAll")
     public ResponseEntity<List<Passport>> find() {
         return new ResponseEntity<>(
                 passportService.findAllPassports(),
@@ -41,9 +41,39 @@ public class PassportController {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Passport is not found. Please, check passportId"));
 
         foundPassport.setFio(passport.getFio());
-        foundPassport.setSerialNumber(passport.getSerialNumber());
+        foundPassport.setSerial(passport.getSerial());
+        foundPassport.setNumber(passport.getNumber());
         foundPassport.setExpirationDate(passport.getExpirationDate());
 
         return new ResponseEntity<>(passportService.savePassport(foundPassport), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@RequestParam int id) {
+        passportService.findPassportById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Passport is not found. Please, check passportId"));
+        passportService.deletePassportById(id);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<List<Passport>> findPassportsBySerial(@RequestParam int serial) {
+        return new ResponseEntity<>(
+                passportService.findPassportsBySerial(serial),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/unavailable")
+    public ResponseEntity<List<Passport>> findUnavailablePassports() {
+        return new ResponseEntity<>(
+                passportService.findUnavailablePassports(),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/find-replaceable")
+    public ResponseEntity<List<Passport>> findReplaceAblePassports() {
+        return new ResponseEntity<>(
+                passportService.findReplaceAblePassports(),
+                HttpStatus.OK);
     }
 }
