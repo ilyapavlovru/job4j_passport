@@ -4,10 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.job4j.passport.domain.Passport;
 import ru.job4j.passport.repository.PassportRepository;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,12 +41,16 @@ public class PassportService {
     }
 
     public List<Passport> findUnavailablePassports() {
-        Date date = new Date(System.currentTimeMillis());
-        return passportRepository.findAllByExpirationDateAfter(date);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        return passportRepository.findAllByExpirationDateBefore(localDateTime.toLocalDate().atTime(0, 0));
     }
 
-    public List<Passport> findReplaceAblePassports() {
-        Date date = Date.from(LocalDate.now().minusMonths(3).atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return passportRepository.findAllByExpirationDateAfter(date);
+    /** Паспорта, которые небходимо заменить в ближайшие months месяцев */
+    public List<Passport> findNeedReplace(int months) {
+        // находим дату через months месяцев
+        LocalDateTime localDateTime = LocalDateTime.now().plus(Period.ofMonths(months));
+        return passportRepository.findAllByExpirationDateBetween(
+                localDateTime.toLocalDate().atTime(0, 0),
+                localDateTime.toLocalDate().atTime(0, 0).plusDays(1));
     }
 }

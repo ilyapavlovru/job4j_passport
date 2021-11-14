@@ -1,9 +1,7 @@
 package ru.job4j.passport.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -23,17 +21,15 @@ public class Passport {
     private int number;
 
     @Column(name = "birth_date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date birthDate;
+    private LocalDateTime birthDate;
 
     @Column(name = "expiration")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date expirationDate;
+    private LocalDateTime expirationDate;
 
     public Passport() {
     }
 
-    public Passport(int id, String fio, int serial, int number, Date birthDate, Date expirationDate) {
+    public Passport(int id, String fio, int serial, int number, LocalDateTime birthDate, LocalDateTime expirationDate) {
         this.id = id;
         this.fio = fio;
         this.serial = serial;
@@ -74,19 +70,19 @@ public class Passport {
         this.number = number;
     }
 
-    public Date getBirthDate() {
+    public LocalDateTime getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }
 
-    public Date getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 

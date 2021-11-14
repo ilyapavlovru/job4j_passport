@@ -23,8 +23,10 @@ public class PassportKafkaService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Scheduled(fixedRateString = "10000")
+//    @Scheduled(fixedRateString = "10000")
     public void sendMessage() {
+
+
 
         PassportDto passportDto1 = new PassportDto("Ilya","ilya@mail.ru");
 //        PassportDto passportDto2 = new PassportDto("Petr","petr@mail.ru");

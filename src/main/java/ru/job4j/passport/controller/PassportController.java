@@ -73,7 +73,7 @@ public class PassportController {
     @GetMapping("/find-replaceable")
     public ResponseEntity<List<Passport>> findReplaceAblePassports() {
         return new ResponseEntity<>(
-                passportService.findReplaceAblePassports(),
+                passportService.findNeedReplace(3),
                 HttpStatus.OK);
     }
 }
