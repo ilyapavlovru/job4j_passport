@@ -10,7 +10,12 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import ru.job4j.passport.domain.Passport;
 import ru.job4j.passport.kafka.dto.PassportDto;
+import ru.job4j.passport.kafka.mapper.DomainToKafka;
+import ru.job4j.passport.service.PassportService;
+
+import java.util.List;
 
 @Service
 public class PassportKafkaService {
@@ -18,27 +23,31 @@ public class PassportKafkaService {
     @Autowired
     private KafkaTemplate<String, PassportDto> kafkaTemplate;
 
+    @Autowired
+    private PassportService passportService;
+
+    @Autowired
+    private DomainToKafka toKafka;
+
     @Value(value = "${app.topic.name}")
     private String topicName;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-//    @Scheduled(fixedRateString = "10000")
+    @Scheduled(fixedRateString = "10000")
     public void sendMessage() {
 
+        List<Passport> passports = passportService.findUnavailablePassports();
+        List<PassportDto> passportDtos = toKafka.toKafkaPassportDtos(passports);
 
-
-        PassportDto passportDto1 = new PassportDto("Ilya","ilya@mail.ru");
-//        PassportDto passportDto2 = new PassportDto("Petr","petr@mail.ru");
-//        List<PassportDto> passportDtos = Arrays.asList(passportDto1, passportDto2);
-
-        logger.info("send message = {}", passportDto1);
-        Message<PassportDto> message = MessageBuilder
-                .withPayload(passportDto1)
-                .setHeader(KafkaHeaders.TOPIC, topicName)
-                .build();
-        kafkaTemplate.send(topicName, passportDto1);
-
+        passportDtos.forEach(passportDto -> {
+            logger.info("send message = {}", passportDto);
+            Message<PassportDto> message = MessageBuilder
+                    .withPayload(passportDto)
+                    .setHeader(KafkaHeaders.TOPIC, topicName)
+                    .build();
+            kafkaTemplate.send(message);
+        });
     }
 
 }

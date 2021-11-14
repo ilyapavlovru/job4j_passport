@@ -14,6 +14,8 @@ public class Passport {
 
     private String fio;
 
+    private String email;
+
     @Column(name = "passport_serial")
     private int serial;
 
@@ -29,9 +31,11 @@ public class Passport {
     public Passport() {
     }
 
-    public Passport(int id, String fio, int serial, int number, LocalDateTime birthDate, LocalDateTime expirationDate) {
+    public Passport(int id, String fio, String email, int serial, int number,
+                    LocalDateTime birthDate, LocalDateTime expirationDate) {
         this.id = id;
         this.fio = fio;
+        this.email = email;
         this.serial = serial;
         this.number = number;
         this.birthDate = birthDate;
@@ -52,6 +56,14 @@ public class Passport {
 
     public void setFio(String fio) {
         this.fio = fio;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getSerial() {
@@ -95,12 +107,26 @@ public class Passport {
                 serial == passport.serial &&
                 number == passport.number &&
                 Objects.equals(fio, passport.fio) &&
+                Objects.equals(email, passport.email) &&
                 Objects.equals(birthDate, passport.birthDate) &&
                 Objects.equals(expirationDate, passport.expirationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fio, serial, number, birthDate, expirationDate);
+        return Objects.hash(id, fio, email, serial, number, birthDate, expirationDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Passport{" +
+                "id=" + id +
+                ", fio='" + fio + '\'' +
+                ", email='" + email + '\'' +
+                ", serial=" + serial +
+                ", number=" + number +
+                ", birthDate=" + birthDate +
+                ", expirationDate=" + expirationDate +
+                '}';
     }
 }
