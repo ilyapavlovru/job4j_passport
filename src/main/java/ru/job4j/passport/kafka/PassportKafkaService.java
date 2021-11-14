@@ -16,10 +16,10 @@ import ru.job4j.passport.kafka.dto.PassportDto;
 public class PassportKafkaService {
 
     @Autowired
-    private KafkaTemplate<String, PassportDto> greetingKafkaTemplate;
+    private KafkaTemplate<String, PassportDto> kafkaTemplate;
 
-    @Value(value = "${greeting.topic.name}")
-    private String greetingTopicName;
+    @Value(value = "${app.topic.name}")
+    private String topicName;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -33,9 +33,9 @@ public class PassportKafkaService {
         logger.info("send message = {}", passportDto1);
         Message<PassportDto> message = MessageBuilder
                 .withPayload(passportDto1)
-                .setHeader(KafkaHeaders.TOPIC, greetingTopicName)
+                .setHeader(KafkaHeaders.TOPIC, topicName)
                 .build();
-        greetingKafkaTemplate.send(greetingTopicName, passportDto1);
+        kafkaTemplate.send(topicName, passportDto1);
 
     }
 
