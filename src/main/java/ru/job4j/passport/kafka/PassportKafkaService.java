@@ -34,7 +34,7 @@ public class PassportKafkaService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Scheduled(fixedRateString = "10000")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void sendMessage() {
 
         List<Passport> passports = passportService.findUnavailablePassports();
